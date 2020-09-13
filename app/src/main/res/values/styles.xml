@@ -2,9 +2,42 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorPrimaryInverse">@android:color/black</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Background for the search query section (e.g. EditText) -->
+        <item name="queryBackground">@drawable/rounded_rectangle</item>
+<!--        &lt;!&ndash; Background for the actions section (e.g. voice, submit) &ndash;&gt;-->
+        <item name="submitBackground">@drawable/rounded_rectangle</item>
+<!--        &lt;!&ndash; Close button icon &ndash;&gt;-->
+            <item name="closeIcon">@drawable/ic_close_search</item>
+<!--        &lt;!&ndash; Search button icon &ndash;&gt;-->
+            <item name="searchIcon">@drawable/ic_search</item>
+<!--        &lt;!&ndash; Go/commit button icon &ndash;&gt;-->
+<!--        <item name="goIcon">...</item>-->
+<!--        &lt;!&ndash; Voice search button icon &ndash;&gt;-->
+<!--        <item name="voiceIcon">...</item>-->
+<!--        &lt;!&ndash; Commit icon shown in the query suggestion row &ndash;&gt;-->
+<!--        <item name="commitIcon">...</item>-->
+<!--        &lt;!&ndash; Layout for query suggestion rows &ndash;&gt;-->
+<!--        <item name="suggestionRowLayout">...</item>-->
     </style>
 
 </resources>

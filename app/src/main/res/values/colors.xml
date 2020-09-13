@@ -3,4 +3,13 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="lightGreen">#78B286</color>
+    <color name="darkGreen">#4E865C</color>
+    <color name="lightOrange">#F3A743</color>
+    <color name="supaRed">#E64647</color>
+    <color name="orangeOrange">#EE7745</color>
+    <color name="darkOrange">#CB5625</color>
+    <color name="mainBlue">#4867B8</color>
+    <color name="plainGrey">#98A3B2</color>
+    <color name="somehowBlack">#2D2F45</color>
 </resources>

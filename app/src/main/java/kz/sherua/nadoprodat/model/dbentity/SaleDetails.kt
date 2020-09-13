@@ -1,15 +1,17 @@
 package kz.sherua.nadoprodat.model.dbentity
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+@Entity
 data class SaleDetails(
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    val salesId: Int,
-    val productId: Int,
+    val id: Long,
+    val salesId: Long,
+    val productId: Long,
     val productSalesPrice: Double,
-    val currencyId: Int,
-    val crDate: Date,
-    val upDate: Date
+    val currencyId: Long,
+    val crDate: Long,
+    val upDate: Long
 )

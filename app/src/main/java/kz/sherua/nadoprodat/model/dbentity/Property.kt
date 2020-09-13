@@ -1,12 +1,14 @@
 package kz.sherua.nadoprodat.model.dbentity
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+@Entity
 data class Property (
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val id: Long? = null,
     val name: String,
-    val crDate: Date,
-    val upDate: Date
+    val crDate: Long,
+    val upDate: Long
 )
