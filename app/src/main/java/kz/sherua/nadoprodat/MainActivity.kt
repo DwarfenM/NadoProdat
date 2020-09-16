@@ -48,8 +48,15 @@ class MainActivity : AppCompatActivity() {
             textView2.visibility = View.GONE
         }
         searchView.setOnCloseListener {
+            searchView.onActionViewCollapsed()
             textView2.visibility = View.VISIBLE
             false
+        }
+        searchView.setOnQueryTextFocusChangeListener{ v, hasFocus ->
+            Log.d("info", "triggered")
+            if(!hasFocus) {
+                searchView.onActionViewCollapsed()
+            }
         }
     }
 
