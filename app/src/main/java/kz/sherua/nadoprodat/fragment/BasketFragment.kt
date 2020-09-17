@@ -1,7 +1,9 @@
 package kz.sherua.nadoprodat.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -32,9 +34,11 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
         openSearch = BehaviorSubject.create()
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.textView2?.text = "Корзина"
+//        activity?.appBarMain?.visibility = View.GONE
         activity?.searchView?.setOnCloseListener {
             closeSearch.onNext(true)
             false
@@ -42,6 +46,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
         activity?.searchView?.setOnSearchClickListener {
             openSearch.onNext(true)
         }
+        toolbarBasket.setNavigationIcon(R.drawable.ic_humburger)
         itemsAdapter = BasketItemsAdapter()
         rvBasket.adapter = itemsAdapter
         rvBasket.layoutManager = GridLayoutManager(context!!,1)
