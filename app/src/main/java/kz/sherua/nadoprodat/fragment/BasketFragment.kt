@@ -1,62 +1,114 @@
 package kz.sherua.nadoprodat.fragment
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.jakewharton.rxbinding2.view.RxView
-import com.jakewharton.rxbinding2.widget.RxSearchView
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_basket.*
 import kz.sherua.nadoprodat.R
+import kz.sherua.nadoprodat.adapter.BasketItemsAdapter
+import kz.sherua.nadoprodat.dialog.AddItemDialog
 import kz.sherua.nadoprodat.presenter.BasketPresenter
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.view.BasketView
 
 class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
+    private lateinit var itemsAdapter: BasketItemsAdapter
+    private lateinit var closeSearch: BehaviorSubject<Boolean>
+    private lateinit var openSearch: BehaviorSubject<Boolean>
+    private lateinit var itemAdded: BehaviorSubject<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        closeSearch = BehaviorSubject.create()
+        itemAdded = BehaviorSubject.create()
+        openSearch = BehaviorSubject.create()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.textView2?.text = "Корзина"
+        activity?.searchView?.setOnCloseListener {
+            closeSearch.onNext(true)
+            false
+        }
+        activity?.searchView?.setOnSearchClickListener {
+            openSearch.onNext(true)
+        }
+        itemsAdapter = BasketItemsAdapter()
+        rvBasket.adapter = itemsAdapter
+        rvBasket.layoutManager = GridLayoutManager(context!!,1)
+        activity?.searchView?.setOnQueryTextFocusChangeListener{ v, hasFocus ->
+            if(!hasFocus) {
+//                closeSearch.onNext(true)
+            }
+        }
+
+        btnAddItem.setOnClickListener{
+            val dialog = AddItemDialog()
+            dialog.show(activity?.supportFragmentManager!!, AddItemDialog.TAG)
+            activity?.supportFragmentManager!!.executePendingTransactions()
+            dialog.dialog?.setOnDismissListener{
+                itemAdded.onNext(true)
+            }
+        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.fragment_basket, container, false)
-
-        return v
+        return inflater.inflate(R.layout.fragment_basket, container, false)
     }
 
-    override fun createPresenter() = BasketPresenter()
+    override fun createPresenter() = BasketPresenter(context!!)
 
     override fun openSearchIntent(): Observable<Boolean> {
-        return RxView.clicks(btnSearch).map {
-            true
-        }
+            return Observable.merge(RxView.clicks(btnSearch).map {
+                true
+            },openSearch)
+    }
+
+    override fun closeSearchIntent(): Observable<Boolean> {
+        return closeSearch
+    }
+
+    override fun itemAddedIntent(): Observable<Boolean> {
+        return itemAdded
     }
 
     override fun render(state: BasketState) {
         when(state) {
-            is BasketState.openSearch -> {
+            is BasketState.OpenSearch -> {
                 activity?.searchView?.onActionViewExpanded()
+                activity?.textView2?.visibility = View.GONE
                 val closeBtn = androidx.appcompat.R.id.search_close_btn
                 val imView = activity?.searchView?.findViewById<ImageView>(closeBtn)
                 imView?.visibility = View.VISIBLE
-
-                val searchFragment = SearchFragment()
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.nav_host_fragment,searchFragment,"1")?.commit()
+                searchConstraintLayout.visibility = View.VISIBLE
+                emptyBasket.visibility = View.GONE
+                rvBasket.visibility = View.GONE
+            }
+            is BasketState.CloseSearch -> {
+                activity?.searchView?.onActionViewCollapsed()
+                activity?.textView2?.visibility = View.VISIBLE
+                searchConstraintLayout.visibility = View.GONE
+                emptyBasket.visibility = View.VISIBLE
+                rvBasket.visibility = View.GONE
+            }
+            is BasketState.ItemAdded -> {
+                searchConstraintLayout.visibility = View.GONE
+                emptyBasket.visibility = View.GONE
+                rvBasket.visibility = View.VISIBLE
+                itemsAdapter.addItems(state.basketList)
             }
         }
     }

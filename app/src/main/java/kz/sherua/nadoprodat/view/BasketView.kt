@@ -8,5 +8,9 @@ interface BasketView : MvpView {
 
     fun openSearchIntent(): Observable<Boolean>
 
+    fun closeSearchIntent(): Observable<Boolean>
+
+    fun itemAddedIntent(): Observable<Boolean>
+
     fun render(state: BasketState)
 }
