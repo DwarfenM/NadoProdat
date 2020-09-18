@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_basket.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.adapter.BasketItemsAdapter
 import kz.sherua.nadoprodat.dialog.AddItemDialog
+import kz.sherua.nadoprodat.model.dbentity.Product
 import kz.sherua.nadoprodat.presenter.BasketPresenter
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.view.BasketView
@@ -34,20 +35,24 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
         openSearch = BehaviorSubject.create()
     }
 
+    override fun onResume() {
+        super.onResume()
+        appBarBasket.visibility = View.GONE
+
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.textView2?.text = "Корзина"
-//        activity?.appBarMain?.visibility = View.GONE
-        activity?.searchView?.setOnCloseListener {
-            closeSearch.onNext(true)
-            false
-        }
         activity?.searchView?.setOnSearchClickListener {
             openSearch.onNext(true)
         }
-        toolbarBasket.setNavigationIcon(R.drawable.ic_humburger)
-        itemsAdapter = BasketItemsAdapter()
+        toolbarBasket.setNavigationIcon(R.drawable.ic_back_button)
+        toolbarBasket.setNavigationOnClickListener{
+            closeSearch.onNext(true)
+        }
+        itemsAdapter = BasketItemsAdapter(context!!, btnSell)
         rvBasket.adapter = itemsAdapter
         rvBasket.layoutManager = GridLayoutManager(context!!,1)
         activity?.searchView?.setOnQueryTextFocusChangeListener{ v, hasFocus ->
@@ -90,30 +95,42 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
         return itemAdded
     }
 
+    override fun performSellIntent(): Observable<List<Product>> {
+        return RxView.clicks(btnSell).map {
+            itemsAdapter.getProducts()
+        }
+    }
+
     override fun render(state: BasketState) {
         when(state) {
             is BasketState.OpenSearch -> {
-                activity?.searchView?.onActionViewExpanded()
-                activity?.textView2?.visibility = View.GONE
+                activity?.appBarMain?.visibility = View.GONE
+//                activity?.textView2?.visibility = View.GONE
                 val closeBtn = androidx.appcompat.R.id.search_close_btn
                 val imView = activity?.searchView?.findViewById<ImageView>(closeBtn)
                 imView?.visibility = View.VISIBLE
+                appBarBasket.visibility = View.VISIBLE
+                searchViewBasket.onActionViewExpanded()
                 searchConstraintLayout.visibility = View.VISIBLE
                 emptyBasket.visibility = View.GONE
-                rvBasket.visibility = View.GONE
+                hasItemLayout.visibility = View.GONE
             }
             is BasketState.CloseSearch -> {
-                activity?.searchView?.onActionViewCollapsed()
+                activity?.appBarMain?.visibility = View.VISIBLE
+                appBarBasket.visibility = View.GONE
                 activity?.textView2?.visibility = View.VISIBLE
                 searchConstraintLayout.visibility = View.GONE
                 emptyBasket.visibility = View.VISIBLE
-                rvBasket.visibility = View.GONE
+                hasItemLayout.visibility = View.GONE
             }
             is BasketState.ItemAdded -> {
                 searchConstraintLayout.visibility = View.GONE
+                activity?.appBarMain?.visibility = View.VISIBLE
+                appBarBasket.visibility = View.GONE
                 emptyBasket.visibility = View.GONE
-                rvBasket.visibility = View.VISIBLE
+                hasItemLayout.visibility = View.VISIBLE
                 itemsAdapter.addItems(state.basketList)
+                btnSell.text = "Заработать " + state.basketList.map { it.salesPrice * it.count }.sum()
             }
         }
     }

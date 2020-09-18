@@ -3,12 +3,19 @@ package kz.sherua.nadoprodat.presenter
 import android.content.Context
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kz.sherua.nadoprodat.database.NadoProdatDatabase
+import kz.sherua.nadoprodat.model.dbentity.SaleDetails
+import kz.sherua.nadoprodat.model.dbentity.Sales
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.utils.PreferenceHelper.getBasket
 import kz.sherua.nadoprodat.view.BasketView
 
 class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketState>() {
+
+    private val npDb = NadoProdatDatabase.getInstance(ctx)
 
     override fun bindIntents() {
         val openSearchIntent: Observable<BasketState> =
@@ -26,7 +33,30 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
                 BasketState.ItemAdded(getBasket(ctx))
             }
 
-        val allIntents = Observable.merge(openSearchIntent, closeSearchIntent,itemAddedIntent).observeOn(AndroidSchedulers.mainThread())
+        val itemSellIntent: Observable<BasketState> =
+            intent(BasketView::performSellIntent).flatMap { products ->
+                val sale = Sales(
+                    salesPrice = products.map { it.salesPrice * it.count }.sum(),
+                    crDate = System.currentTimeMillis()
+                )
+                npDb.salesDao().insertSale(sale).map { id ->
+                    products.forEach{
+                        npDb.productDao().updateProduct(it.id!!,it.count).blockingGet()
+                    }
+                    npDb.saleDetailsDao().insertAllSaleDetails(products.map {
+                        SaleDetails(
+                            salesId = id,
+                            productId = it.id!!,
+                            productSalesPrice = it.salesPrice,
+                            crDate = System.currentTimeMillis()
+                        )
+                    }
+
+                    ).andThen(Single.just(BasketState.ItemsSelled)).blockingGet()
+                }.toObservable().subscribeOn(Schedulers.io())
+            }
+
+        val allIntents = Observable.merge(openSearchIntent, closeSearchIntent,itemAddedIntent, itemSellIntent).observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, BasketView::render)
     }

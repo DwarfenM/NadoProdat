@@ -7,6 +7,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kz.sherua.nadoprodat.model.BasketModel
+import kz.sherua.nadoprodat.model.dbentity.Product
 
 object PreferenceHelper {
 
@@ -49,23 +50,27 @@ object PreferenceHelper {
         }
     }
 
-    fun getBasket(ctx: Context) : MutableList<BasketModel> {
+    fun setBasket(model: MutableList<Product>, ctx: Context) {
         val gson = Gson()
         val prefs = customPrefs(ctx, Constants.NP_PREF_NAME)
-        val turnsType = object : TypeToken<List<BasketModel>>() {}.type
+        prefs[Constants.BASKET] = gson.toJson(model)
+    }
+
+    fun getBasket(ctx: Context) : MutableList<Product> {
+        val gson = Gson()
+        val prefs = customPrefs(ctx, Constants.NP_PREF_NAME)
+        val turnsType = object : TypeToken<List<Product>>() {}.type
         val json: String? = prefs[Constants.BASKET]
-        var basketList: MutableList<BasketModel>? = gson.fromJson(json, turnsType)
+        var basketList: MutableList<Product>? = gson.fromJson(json, turnsType)
         if (basketList == null) {
             basketList = arrayListOf()
         }
         return basketList
     }
 
-    fun addItemToSP(model: BasketModel, ctx: Context) {
+    fun addItemToSP(model: Product, ctx: Context) {
         val gson = Gson()
         val prefs = customPrefs(ctx, Constants.NP_PREF_NAME)
-        val turnsType = object : TypeToken<List<BasketModel>>() {}.type
-        val json: String? = prefs[Constants.BASKET]
         var basketList = getBasket(ctx)
         Log.d("AddItemPresenter", "list : $basketList")
         basketList.add(model)

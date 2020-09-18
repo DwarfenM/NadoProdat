@@ -1,6 +1,6 @@
 package kz.sherua.nadoprodat.state
 
-import kz.sherua.nadoprodat.model.BasketModel
+import kz.sherua.nadoprodat.model.dbentity.Product
 
 sealed class BasketState {
 
@@ -8,5 +8,7 @@ sealed class BasketState {
 
     object CloseSearch: BasketState()
 
-    data class ItemAdded(val basketList: List<BasketModel>): BasketState()
+    object ItemsSelled: BasketState()
+
+    data class ItemAdded(val basketList: List<Product>): BasketState()
 }

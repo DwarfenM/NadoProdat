@@ -1,8 +1,8 @@
 package kz.sherua.nadoprodat.model
 
 data class BasketModel (
-    val itemName: String,
-    val itemCount: Long,
-    val itemPrice: Long,
-    val itemUrl: String?
+    var itemName: String,
+    var itemCount: Long,
+    var itemPrice: Long,
+    var itemUrl: String?
 )

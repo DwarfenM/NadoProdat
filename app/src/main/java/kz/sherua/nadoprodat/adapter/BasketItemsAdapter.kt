@@ -1,16 +1,20 @@
 package kz.sherua.nadoprodat.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.search_item.view.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.model.BasketModel
+import kz.sherua.nadoprodat.model.dbentity.Product
+import kz.sherua.nadoprodat.utils.PreferenceHelper.setBasket
 
-class BasketItemsAdapter : RecyclerView.Adapter<BasketItemHolder>() {
+class BasketItemsAdapter(val ctx: Context, val btnSell: Button) : RecyclerView.Adapter<BasketItemHolder>() {
 
-    private var items: MutableList<BasketModel> = mutableListOf()
+    private var items: MutableList<Product> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketItemHolder {
         return BasketItemHolder(
@@ -26,13 +30,31 @@ class BasketItemsAdapter : RecyclerView.Adapter<BasketItemHolder>() {
     }
 
     override fun onBindViewHolder(holder: BasketItemHolder, position: Int) {
-        holder.tvItemName.text = items[position].itemName
-        holder.tvItemPrice.text = items[position].itemPrice.toString()
+        holder.tvItemName.text = items[position].name
+        holder.tvItemPrice.text = items[position].salesPrice.toString()
+        holder.tvCount.text = items[position].count.toString()
+        holder.tvItemPriceXCount.text = items[position].count.toString() + " x " + items[position].salesPrice.toString()
+        holder.btnAddItem.setOnClickListener{
+            items[position].count += 1
+            setBasket(items, ctx)
+            btnSell.text = "Заработать " + items.map { it.salesPrice * it.count }.sum()
+            notifyDataSetChanged()
+        }
+        holder.btnRemoveItem.setOnClickListener{
+            items[position].count -= 1
+            setBasket(items, ctx)
+            btnSell.text = "Заработать " + items.map { it.salesPrice * it.count }.sum()
+            notifyDataSetChanged()
+        }
     }
 
-    fun addItems(itemsToAdd: List<BasketModel>) {
+    fun addItems(itemsToAdd: List<Product>) {
         items = itemsToAdd.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun getProducts() : List<Product> {
+        return items
     }
 }
 

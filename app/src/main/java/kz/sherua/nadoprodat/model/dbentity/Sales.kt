@@ -6,10 +6,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class Sales (
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
-    val salesId: Long,
+    val id: Long?= null,
     val salesPrice: Double,
-    val currencyId: Long,
+    val currencyId: Long?=null,
     val crDate: Long,
-    val upDate: Long
+    val upDate: Long?=null
 )

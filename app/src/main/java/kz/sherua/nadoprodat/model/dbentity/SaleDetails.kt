@@ -7,11 +7,11 @@ import java.util.*
 @Entity
 data class SaleDetails(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long? = null,
     val salesId: Long,
     val productId: Long,
     val productSalesPrice: Double,
-    val currencyId: Long,
+    val currencyId: Long? = null,
     val crDate: Long,
-    val upDate: Long
+    val upDate: Long? = null
 )

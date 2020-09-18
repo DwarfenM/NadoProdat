@@ -11,6 +11,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.add_item_dialog.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.model.BasketModel
+import kz.sherua.nadoprodat.model.dbentity.Product
 import kz.sherua.nadoprodat.presenter.AddItemPresenter
 import kz.sherua.nadoprodat.state.AddItemState
 import kz.sherua.nadoprodat.view.AddItemView
@@ -39,9 +40,9 @@ class AddItemDialog :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddIte
         }
     }
 
-    override fun addItemIntent(): Observable<BasketModel> {
+    override fun addItemIntent(): Observable<Product> {
         return RxView.clicks(btnAddItemAddItem).map {
-            BasketModel(etAddItemItemName.text.toString(),tvAddItemCount.text.toString().toLong(),etAddItemPrice.text.toString().toLong(),null)
+            Product(name = etAddItemItemName.text.toString(), count = tvAddItemCount.text.toString().toInt(), salesPrice = etAddItemPrice.text.toString().toDouble(), isFlex = true)
         }
     }
 
