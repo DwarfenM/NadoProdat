@@ -34,14 +34,14 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
             }
 
         val itemSellIntent: Observable<BasketState> =
-            intent(BasketView::performSellIntent).flatMap { products ->
+            intent(BasketView::performSellIntent).map { products ->
                 val sale = Sales(
                     salesPrice = products.map { it.salesPrice * it.count }.sum(),
                     crDate = System.currentTimeMillis()
                 )
                 npDb.salesDao().insertSale(sale).map { id ->
                     products.forEach{
-                        npDb.productDao().updateProduct(it.id!!,it.count).blockingGet()
+                        npDb.productDao().updateProduct(it.id!!,it.count).subscribe()
                     }
                     npDb.saleDetailsDao().insertAllSaleDetails(products.map {
                         SaleDetails(
@@ -51,9 +51,10 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
                             crDate = System.currentTimeMillis()
                         )
                     }
+                    ).subscribe()
 
-                    ).andThen(Single.just(BasketState.ItemsSelled)).blockingGet()
-                }.toObservable().subscribeOn(Schedulers.io())
+                }.subscribeOn(Schedulers.io()).subscribe()
+                BasketState.ItemsSelled
             }
 
         val allIntents = Observable.merge(openSearchIntent, closeSearchIntent,itemAddedIntent, itemSellIntent).observeOn(AndroidSchedulers.mainThread())
