@@ -31,7 +31,7 @@ class BasketItemsAdapter(val ctx: Context, val btnSell: Button) : RecyclerView.A
 
     override fun onBindViewHolder(holder: BasketItemHolder, position: Int) {
         holder.tvItemName.text = items[position].name
-        holder.tvItemPrice.text = items[position].salesPrice.toString()
+        holder.tvItemPrice.text = (items[position].salesPrice * items[position].count).toString()
         holder.tvCount.text = items[position].count.toString()
         holder.tvItemPriceXCount.text = items[position].count.toString() + " x " + items[position].salesPrice.toString()
         holder.btnAddItem.setOnClickListener{
@@ -42,6 +42,12 @@ class BasketItemsAdapter(val ctx: Context, val btnSell: Button) : RecyclerView.A
         }
         holder.btnRemoveItem.setOnClickListener{
             items[position].count -= 1
+            setBasket(items, ctx)
+            btnSell.text = "Заработать " + items.map { it.salesPrice * it.count }.sum()
+            notifyDataSetChanged()
+        }
+        holder.btnDeleteItem.setOnClickListener{
+            items.removeAt(position)
             setBasket(items, ctx)
             btnSell.text = "Заработать " + items.map { it.salesPrice * it.count }.sum()
             notifyDataSetChanged()

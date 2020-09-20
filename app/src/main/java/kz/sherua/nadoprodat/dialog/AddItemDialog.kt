@@ -1,5 +1,6 @@
 package kz.sherua.nadoprodat.dialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.Window
 import com.hannesdorfmann.mosby3.mvi.MviDialogFragment
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.add_item_dialog.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.model.BasketModel
@@ -16,7 +18,7 @@ import kz.sherua.nadoprodat.presenter.AddItemPresenter
 import kz.sherua.nadoprodat.state.AddItemState
 import kz.sherua.nadoprodat.view.AddItemView
 
-class AddItemDialog :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddItemView{
+class AddItemDialog(val itemAddTrigger: BehaviorSubject<Boolean>) :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddItemView{
 
     companion object {
 
@@ -57,9 +59,14 @@ class AddItemDialog :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddIte
                 tvAddItemCount.text = state.count.toString()
             }
             is AddItemState.AddItem -> {
-
+                dismiss()
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        itemAddTrigger.onNext(true)
     }
 
     override fun onCreateView(

@@ -62,12 +62,9 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
         }
 
         btnAddItem.setOnClickListener{
-            val dialog = AddItemDialog()
+            val dialog = AddItemDialog(itemAdded)
             dialog.show(activity?.supportFragmentManager!!, AddItemDialog.TAG)
             activity?.supportFragmentManager!!.executePendingTransactions()
-            dialog.dialog?.setOnDismissListener{
-                itemAdded.onNext(true)
-            }
         }
 
     }
