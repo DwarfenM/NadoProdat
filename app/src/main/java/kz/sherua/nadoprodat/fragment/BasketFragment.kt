@@ -38,7 +38,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
     override fun onResume() {
         super.onResume()
         appBarBasket.visibility = View.GONE
-
+        itemAdded.onNext(true)
     }
 
 
@@ -128,6 +128,9 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView {
                 hasItemLayout.visibility = View.VISIBLE
                 itemsAdapter.addItems(state.basketList)
                 btnSell.text = "Заработать " + state.basketList.map { it.salesPrice * it.count }.sum()
+            }
+            is BasketState.ItemsSelled -> {
+                itemAdded.onNext(true)
             }
         }
     }

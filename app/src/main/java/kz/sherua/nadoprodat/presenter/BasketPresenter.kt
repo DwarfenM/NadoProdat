@@ -11,6 +11,7 @@ import kz.sherua.nadoprodat.model.dbentity.SaleDetails
 import kz.sherua.nadoprodat.model.dbentity.Sales
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.utils.PreferenceHelper.getBasket
+import kz.sherua.nadoprodat.utils.PreferenceHelper.setBasket
 import kz.sherua.nadoprodat.view.BasketView
 
 class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketState>() {
@@ -30,7 +31,12 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
 
         val itemAddedIntent: Observable<BasketState> =
             intent(BasketView::itemAddedIntent).map {
-                BasketState.ItemAdded(getBasket(ctx))
+                val basket = getBasket(ctx)
+                if (basket.size > 0) {
+                    BasketState.ItemAdded(getBasket(ctx))
+                } else {
+                    BasketState.CloseSearch
+                }
             }
 
         val itemSellIntent: Observable<BasketState> =
@@ -54,6 +60,7 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
                     ).subscribe()
 
                 }.subscribeOn(Schedulers.io()).subscribe()
+                setBasket(arrayListOf(), ctx)
                 BasketState.ItemsSelled
             }
 
