@@ -15,5 +15,13 @@ interface BasketView : MvpView {
 
     fun performSellIntent(): Observable<List<Product>>
 
+//    fun addItemIntent(): Observable<ProductWithProperty>
+
+    fun searchItemIntent(): Observable<String>
+
+    fun sortIntent(): Observable<Boolean>
+
+    fun deleteBasket(): Observable<Boolean>
+
     fun render(state: BasketState)
 }

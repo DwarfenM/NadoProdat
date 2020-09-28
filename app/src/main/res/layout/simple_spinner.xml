@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/standard_spinner_format"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/circe_bold"
+    android:textColor="#100A0A"
+    android:textSize="15sp"
+    app:autoSizeMaxTextSize="15sp"
+    app:autoSizeMinTextSize="8sp"
+    app:autoSizeStepGranularity="1sp"
+    app:autoSizeTextType="uniform" />

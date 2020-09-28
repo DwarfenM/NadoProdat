@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.search_item.view.*
+import kotlinx.android.synthetic.main.sell_item.view.*
 import kz.sherua.nadoprodat.R
-import kz.sherua.nadoprodat.model.BasketModel
 import kz.sherua.nadoprodat.model.dbentity.Product
 import kz.sherua.nadoprodat.utils.PreferenceHelper.setBasket
 
@@ -20,7 +19,7 @@ class BasketItemsAdapter(val ctx: Context, val btnSell: Button) : RecyclerView.A
         return BasketItemHolder(
             LayoutInflater.from(parent.context)
                 .inflate(
-                    R.layout.search_item,
+                    R.layout.sell_item,
                     parent,
                     false))
     }

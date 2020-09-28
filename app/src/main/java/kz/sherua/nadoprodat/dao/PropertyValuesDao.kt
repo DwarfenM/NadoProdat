@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import kz.sherua.nadoprodat.model.dbentity.ProductWithProperty
+import kz.sherua.nadoprodat.model.dbentity.PropertyValuesWithProps
 import kz.sherua.nadoprodat.model.dbentity.PropertyValues
 
 @Dao
@@ -15,5 +15,5 @@ interface PropertyValuesDao {
 
     @Transaction
     @Query("SELECT * FROM PropertyValues WHERE productId = :productId")
-    fun getAllProductsWithProperty(productId: Long): List<ProductWithProperty>
+    fun getAllProductsWithProperty(productId: Long): List<PropertyValuesWithProps>
 }

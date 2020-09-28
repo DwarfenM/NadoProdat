@@ -52,7 +52,7 @@ class ExampleInstrumentedTest {
     @Test
     fun testNadoProdatRelationships() {
         val product1 = Product(0,"test",50,40.5,0,50.5,0,0,0,0,true,"fdfd", 0, 0)
-        productDao.insertProduct(product1)
+        productDao.insertProduct(product1).subscribe()
 
         val property1 = Property(0,"cvet", 0, 0)
         val property2 = Property(1,"ves", 0, 0)
