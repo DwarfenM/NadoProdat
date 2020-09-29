@@ -3,7 +3,6 @@ package kz.sherua.nadoprodat.presenter
 import android.content.Context
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kz.sherua.nadoprodat.database.NadoProdatDatabase
@@ -11,6 +10,7 @@ import kz.sherua.nadoprodat.model.dbentity.Product
 import kz.sherua.nadoprodat.model.dbentity.SaleDetails
 import kz.sherua.nadoprodat.model.dbentity.Sales
 import kz.sherua.nadoprodat.state.BasketState
+import kz.sherua.nadoprodat.utils.PreferenceHelper
 import kz.sherua.nadoprodat.utils.PreferenceHelper.getBasket
 import kz.sherua.nadoprodat.utils.PreferenceHelper.setBasket
 import kz.sherua.nadoprodat.view.BasketView
@@ -52,10 +52,18 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
             }
 
         val deleteBasketIntent: Observable<BasketState> =
-            intent(BasketView::deleteBasket).map {
+            intent(BasketView::deleteBasketIntent).map {
                 val basket: List<Product> = arrayListOf()
                 setBasket(basket.toMutableList(),ctx)
                 BasketState.BasketDeletedState(arrayListOf())
+            }
+
+        val addItemFromSearchIntent: Observable<BasketState> =
+            intent(BasketView::addItemIntent).map {
+                val product = it.product
+                product.count = 1
+                PreferenceHelper.addItemToSP(product, ctx)
+                BasketState.ItemAdded(getBasket(ctx))
             }
 
         val itemSellIntent: Observable<BasketState> =
@@ -94,7 +102,7 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
                 }
             }
 
-        val allIntents = Observable.merge(openSearchIntent, closeSearchIntent,itemAddedIntent, Observable.merge(itemSellIntent,sortIntent,deleteBasketIntent,findItemIntent)).observeOn(AndroidSchedulers.mainThread())
+        val allIntents = Observable.merge(Observable.merge(openSearchIntent,addItemFromSearchIntent), closeSearchIntent,itemAddedIntent, Observable.merge(itemSellIntent,sortIntent,deleteBasketIntent,findItemIntent)).observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, BasketView::render)
     }

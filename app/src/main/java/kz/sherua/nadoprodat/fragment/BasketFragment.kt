@@ -20,6 +20,7 @@ import kz.sherua.nadoprodat.adapter.BasketItemsAdapter
 import kz.sherua.nadoprodat.adapter.SearchItemsAdapter
 import kz.sherua.nadoprodat.dialog.AddItemDialog
 import kz.sherua.nadoprodat.model.dbentity.Product
+import kz.sherua.nadoprodat.model.dbentity.ProductWithProps
 import kz.sherua.nadoprodat.presenter.BasketPresenter
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.view.BasketView
@@ -32,6 +33,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
     private lateinit var itemAdded: BehaviorSubject<Boolean>
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var searchAdapter: SearchItemsAdapter
+    private lateinit var addItemTrigger: BehaviorSubject<ProductWithProps>
     private val sortVals = arrayListOf("Сортировка", "По возрастанию цены", "По убыванию цены")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         closeSearch = BehaviorSubject.create()
         itemAdded = BehaviorSubject.create()
         openSearch = BehaviorSubject.create()
+        addItemTrigger = BehaviorSubject.create()
     }
 
     override fun onResume() {
@@ -55,6 +58,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         spinnerSort.adapter = adapter
         activity?.textView2?.text = "Корзина"
         activity?.searchView?.setOnSearchClickListener {
+            activity?.searchView?.onActionViewCollapsed()
             openSearch.onNext(true)
         }
         toolbarBasket.setNavigationIcon(R.drawable.ic_back_button)
@@ -64,7 +68,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         itemsAdapter = BasketItemsAdapter(context!!, btnSell)
         rvBasket.adapter = itemsAdapter
         rvBasket.layoutManager = GridLayoutManager(context!!,1)
-        searchAdapter = SearchItemsAdapter(context!!)
+        searchAdapter = SearchItemsAdapter(context!!,addItemTrigger)
         rvSearchItems.adapter = searchAdapter
         rvSearchItems.layoutManager = GridLayoutManager(context!!, 1)
         activity?.searchView?.setOnQueryTextFocusChangeListener{ v, hasFocus ->
@@ -110,6 +114,10 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         }
     }
 
+    override fun addItemIntent(): Observable<ProductWithProps> {
+        return addItemTrigger
+    }
+
     override fun searchItemIntent(): Observable<String> {
         return RxSearchView.queryTextChanges(searchViewBasket)
             .map (CharSequence::toString)
@@ -129,7 +137,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         }
     }
 
-    override fun deleteBasket(): Observable<Boolean> {
+    override fun deleteBasketIntent(): Observable<Boolean> {
         return RxView.clicks(btnDeleteAllFromBasket).map {
             true
         }
@@ -162,6 +170,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
                 activity?.appBarMain?.visibility = View.VISIBLE
                 appBarBasket.visibility = View.GONE
                 emptyBasket.visibility = View.GONE
+                searchViewBasket.onActionViewCollapsed()
                 hasItemLayout.visibility = View.VISIBLE
                 itemsAdapter.addItems(state.basketList)
                 btnSell.text = "Заработать " + state.basketList.map { it.salesPrice * it.count }.sum()

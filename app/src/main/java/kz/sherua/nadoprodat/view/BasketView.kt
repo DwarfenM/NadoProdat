@@ -3,6 +3,7 @@ package kz.sherua.nadoprodat.view
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import io.reactivex.Observable
 import kz.sherua.nadoprodat.model.dbentity.Product
+import kz.sherua.nadoprodat.model.dbentity.ProductWithProps
 import kz.sherua.nadoprodat.state.BasketState
 
 interface BasketView : MvpView {
@@ -15,13 +16,13 @@ interface BasketView : MvpView {
 
     fun performSellIntent(): Observable<List<Product>>
 
-//    fun addItemIntent(): Observable<ProductWithProperty>
+    fun addItemIntent(): Observable<ProductWithProps>
 
     fun searchItemIntent(): Observable<String>
 
     fun sortIntent(): Observable<Boolean>
 
-    fun deleteBasket(): Observable<Boolean>
+    fun deleteBasketIntent(): Observable<Boolean>
 
     fun render(state: BasketState)
 }
