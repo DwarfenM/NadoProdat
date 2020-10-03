@@ -24,7 +24,6 @@ import kz.sherua.nadoprodat.model.dbentity.ProductWithProps
 import kz.sherua.nadoprodat.presenter.BasketPresenter
 import kz.sherua.nadoprodat.state.BasketState
 import kz.sherua.nadoprodat.view.BasketView
-import java.util.concurrent.TimeUnit
 
 class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
     private lateinit var itemsAdapter: BasketItemsAdapter
@@ -56,7 +55,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
         adapter = ArrayAdapter(context!!, R.layout.simple_spinner, sortVals)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSort.adapter = adapter
-        activity?.textView2?.text = "Корзина"
+        activity?.tvHeaderTab?.text = "Корзина"
         activity?.searchView?.setOnSearchClickListener {
             activity?.searchView?.onActionViewCollapsed()
             openSearch.onNext(true)
@@ -160,7 +159,7 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
             is BasketState.CloseSearch -> {
                 activity?.appBarMain?.visibility = View.VISIBLE
                 appBarBasket.visibility = View.GONE
-                activity?.textView2?.visibility = View.VISIBLE
+                activity?.tvHeaderTab?.visibility = View.VISIBLE
                 searchConstraintLayout.visibility = View.GONE
                 emptyBasket.visibility = View.VISIBLE
                 hasItemLayout.visibility = View.GONE

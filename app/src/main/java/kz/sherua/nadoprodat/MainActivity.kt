@@ -1,9 +1,7 @@
 package kz.sherua.nadoprodat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -16,11 +14,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.ActionBarDrawerToggle as ActionBarDrawerToggle1
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +33,36 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+
+        val actionBarDrawerToggle =  object : ActionBarDrawerToggle1(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        ) {
+            
+            override fun onDrawerStateChanged(newState: Int) {
+                if (newState == DrawerLayout.STATE_SETTLING) {
+                    if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back_button)
+                        lvNavTab.visibility = View.VISIBLE
+                        lvMain.visibility = View.GONE
+                    } else {
+                        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_humburger)
+                        lvNavTab.visibility = View.GONE
+                        lvMain.visibility = View.VISIBLE
+                    }
+                }
+                super.onDrawerStateChanged(newState)
+            }
+
+        }
+        drawerLayout.addDrawerListener(actionBarDrawerToggle)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
@@ -46,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_humburger)
         searchView.setOnSearchClickListener{
-            textView2.visibility = View.GONE
+            tvHeaderTab.visibility = View.GONE
         }
     }
 
