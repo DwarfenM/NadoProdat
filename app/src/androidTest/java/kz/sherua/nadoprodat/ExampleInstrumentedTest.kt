@@ -6,13 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kz.sherua.nadoprodat.dao.ProductDao
-import kz.sherua.nadoprodat.dao.PropertyDao
-import kz.sherua.nadoprodat.dao.PropertyValuesDao
+import kz.sherua.nadoprodat.dao.*
 import kz.sherua.nadoprodat.database.NadoProdatDatabase
-import kz.sherua.nadoprodat.model.dbentity.Product
-import kz.sherua.nadoprodat.model.dbentity.Property
-import kz.sherua.nadoprodat.model.dbentity.PropertyValues
+import kz.sherua.nadoprodat.model.dbentity.*
 import org.junit.After
 
 import org.junit.Test
@@ -33,6 +29,8 @@ class ExampleInstrumentedTest {
     private lateinit var productDao: ProductDao
     private lateinit var propertyDao: PropertyDao
     private lateinit var propertyValuesDao: PropertyValuesDao
+    private lateinit var salesDetailsDao: SaleDetailsDao
+    private lateinit var salesDao: SalesDao
     private lateinit var nadoProdatDatabase: NadoProdatDatabase
 
     @Before
@@ -42,6 +40,8 @@ class ExampleInstrumentedTest {
         productDao = nadoProdatDatabase.productDao()
         propertyDao = nadoProdatDatabase.propertyDao()
         propertyValuesDao = nadoProdatDatabase.propertyValuesDao()
+        salesDetailsDao = nadoProdatDatabase.saleDetailsDao()
+        salesDao = nadoProdatDatabase.salesDao()
     }
 
     @After
@@ -66,6 +66,16 @@ class ExampleInstrumentedTest {
 
         var productsWithProp = propertyValuesDao.getAllProductsWithProperty(0)
         Log.d("testDb", "values: $productsWithProp")
+
+        val sales = Sales(id=0,salesPrice = 10.0, crDate = 0)
+        salesDao.insertSale(sales).subscribe()
+
+        val salesDetail = SaleDetails(salesId = 0,productId = 0,productSalesPrice = 0.0,crDate = 0)
+        salesDetailsDao.insertAllSaleDetails(arrayListOf(salesDetail)).subscribe()
+
+        Log.d("testDbSales", "sales values: ${salesDao.getSales()}")
+
+
     }
 
 
