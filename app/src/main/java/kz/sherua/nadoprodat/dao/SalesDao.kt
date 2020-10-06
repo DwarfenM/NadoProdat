@@ -17,5 +17,5 @@ interface SalesDao {
 
     @Transaction
     @Query("SELECT * FROM Sales")
-    fun getSales(): List<SalesWithDetailsAndProducts>
+    fun getSales(): Flowable<List<SalesWithDetailsAndProducts>>
 }
