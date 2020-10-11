@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kz.sherua.nadoprodat.fragment.SalesFragment
 import androidx.appcompat.app.ActionBarDrawerToggle as ActionBarDrawerToggle1
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +34,10 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-
+        lvSells.setOnClickListener {
+            val salesFragment: SalesFragment = SalesFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, salesFragment).commit()
+        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)

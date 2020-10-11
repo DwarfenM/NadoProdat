@@ -4,14 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.SalesFragment">
+    tools:context=".fragment.SalesFragment"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/white"
+
+    >
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hasItemLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +44,7 @@
             app:layout_constraintGuide_begin="20dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBasket"
+            android:id="@+id/rvSales"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="visible"
@@ -126,7 +131,7 @@
         android:id="@+id/emptySales"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -215,4 +220,4 @@
             app:layout_constraintTop_toTopOf="@+id/guideline7"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</>
+</androidx.constraintlayout.widget.ConstraintLayout>

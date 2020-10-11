@@ -5,6 +5,10 @@
     android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@android:color/white"
+
+    android:focusable="true"
     tools:context=".fragment.BasketFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
