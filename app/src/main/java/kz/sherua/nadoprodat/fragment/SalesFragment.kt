@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_sales.*
-import kotlinx.android.synthetic.main.fragment_sales.appBarBasket
 import kotlinx.android.synthetic.main.fragment_sales.hasItemLayout
 import kotlinx.android.synthetic.main.fragment_sales.searchConstraintLayout
 import kz.sherua.nadoprodat.R
@@ -43,7 +41,7 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.appBarMain?.visibility = View.VISIBLE
-        appBarBasket.visibility = View.GONE
+        appBarSales.visibility = View.GONE
         activity?.tvHeaderTab?.visibility = View.VISIBLE
         searchConstraintLayout.visibility = View.GONE
         emptySales.visibility = View.VISIBLE
@@ -64,15 +62,18 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
         when (state) {
             is SalesState.SalesEmpty -> {
                 activity?.appBarMain?.visibility = View.VISIBLE
-                appBarBasket.visibility = View.GONE
+                appBarSales.visibility = View.GONE
                 activity?.tvHeaderTab?.visibility = View.VISIBLE
                 searchConstraintLayout.visibility = View.GONE
                 emptySales.visibility = View.VISIBLE
                 hasItemLayout.visibility = View.GONE
             }
             is SalesState.GetAllSales -> {
-                val listOfDate: List<Date> = state.sellsList.map { Date(it.sales.crDate) }
-
+                activity?.appBarMain?.visibility = View.VISIBLE
+                activity?.tvHeaderTab?.visibility = View.VISIBLE
+                searchConstraintLayout.visibility = View.GONE
+                emptySales.visibility = View.GONE
+                hasItemLayout.visibility = View.VISIBLE
                 val groupedList = state.sellsList.groupBy {
                     val date = Date(it.sales.crDate)
                     val formatter = SimpleDateFormat("dd/MM/yyyy")
@@ -82,16 +83,16 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
                     ParentSalesModel(
                         it.first,
                         it.second.map { sales ->
-                            sales.salesDetails.map { det -> det.salesDetails.productSalesPrice }
-                                .sum()
+                            sales.sales.salesPrice
                         }.sum(),
                         it.second.toMutableList()
                     )
                 }
-                Log.d("Date list: ", parentSalesModel.toString())
-                listOfDate.forEach {
-                    Log.d("Date: ", it.toString())
-                }
+                itemsAdapter.addItems(parentSalesModel.toMutableList());
+//                Log.d("Date list: ", parentSalesModel.toString())
+//                listOfDate.forEach {
+//                    Log.d("Date: ", it.toString())
+//                }
 //                val list : MutableList<ParentSalesModel> = state.sellsList.map {
 //                    ParentSalesModel(date = )
 //                }
