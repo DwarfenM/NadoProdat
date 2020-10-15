@@ -11,6 +11,7 @@ data class SaleDetails(
     val salesId: Long,
     val productId: Long,
     val productSalesPrice: Double,
+    val productCount: Long,
     val currencyId: Long? = null,
     val crDate: Long,
     val upDate: Long? = null
