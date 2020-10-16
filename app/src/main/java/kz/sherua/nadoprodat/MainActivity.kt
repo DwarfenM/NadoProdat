@@ -1,6 +1,7 @@
 package kz.sherua.nadoprodat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,6 +24,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    override fun onBackPressed() {
+
+        if (supportFragmentManager!!.backStackEntryCount > 0) {
+            Log.d("here", "here")
+            supportFragmentManager.popBackStackImmediate()
+        } else {
+            super.onBackPressed()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
         lvSells.setOnClickListener {
             val salesFragment: SalesFragment = SalesFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, salesFragment).commit()
+            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, salesFragment, salesFragment.NAME).commit()
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

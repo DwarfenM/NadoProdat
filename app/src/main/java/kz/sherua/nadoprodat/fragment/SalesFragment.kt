@@ -27,6 +27,8 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
 
     private lateinit var itemsAdapter: SalesItemsAdapter
 
+    val NAME = "SalesFragment"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -38,6 +40,11 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
         return inflater.inflate(R.layout.fragment_sales, container, false)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("resume", "resume")
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.appBarMain?.visibility = View.VISIBLE
