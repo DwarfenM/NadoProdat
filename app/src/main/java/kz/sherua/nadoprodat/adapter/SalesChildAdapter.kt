@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.sales_collapsed_child.view.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.fragment.SingleSaleFragment
 import kz.sherua.nadoprodat.model.dbentity.SalesWithDetailsAndProducts
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SalesChildItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SalesChildItemHolder>() {
 
@@ -30,12 +32,17 @@ class SalesChildItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SalesChild
     }
 
     override fun onBindViewHolder(holder: SalesChildItemHolder, position: Int) {
+        val date = Date(items[position].sales.crDate)
+        val formatter = SimpleDateFormat("HH:mm")
         holder.tvName.text = "Продажа $position"
         holder.tvPrice.text = items[position].sales.salesPrice.toString()
         holder.salesChildView.setOnClickListener {
             val frag = SingleSaleFragment()
             (ctx as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, frag).addToBackStack(null).commit()
         }
+        holder.tvTime.text = formatter.format(date)
+        holder.tvSalesCount.text = items[position].salesDetails.size.toString() + " товаров на сумму:"
+
     }
 
     fun addItems(itemsToAdd: MutableList<SalesWithDetailsAndProducts>) {
@@ -47,6 +54,7 @@ class SalesChildItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SalesChild
 class SalesChildItemHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvName = view.tvItemName
     val tvPrice = view.tvItemPrice
-    val tvCxI = view.tvItemPriceXCount
+    val tvTime = view.tvTime
     val salesChildView = view.salesChildView
+    val tvSalesCount = view.tvSalesCount
 }

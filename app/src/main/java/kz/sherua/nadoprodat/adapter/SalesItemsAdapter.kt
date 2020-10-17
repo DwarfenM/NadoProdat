@@ -43,6 +43,7 @@ class SalesItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SalesItemHolder
         childAdapter.addItems(items[position].childs)
         holder.rvAdapter.adapter = childAdapter
         holder.tvSum.text = items[position].sum.toString()
+
     }
 
     fun addItems(itemsToAdd: MutableList<ParentSalesModel>) {
