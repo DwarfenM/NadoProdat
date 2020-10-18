@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kz.sherua.nadoprodat.R
+import kz.sherua.nadoprodat.model.dbentity.SalesWithDetailsAndProducts
 
 class SingleSaleFragment : Fragment() {
 
@@ -21,6 +22,8 @@ class SingleSaleFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_single_sale, container, false)
     }
 
+    companion object {
 
+    }
 
 }

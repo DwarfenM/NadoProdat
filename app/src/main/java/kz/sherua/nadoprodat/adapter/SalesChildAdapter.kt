@@ -36,7 +36,7 @@ class SalesChildItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SalesChild
         val formatter = SimpleDateFormat("HH:mm")
         holder.tvName.text = "Продажа $position"
         holder.tvPrice.text = items[position].sales.salesPrice.toString()
-        holder.salesChildView.setOnClickListener {
+        holder.lvAddInfo.setOnClickListener {
             val frag = SingleSaleFragment()
             (ctx as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, frag).addToBackStack(null).commit()
         }
@@ -55,6 +55,6 @@ class SalesChildItemHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvName = view.tvItemName
     val tvPrice = view.tvItemPrice
     val tvTime = view.tvTime
-    val salesChildView = view.salesChildView
+    val lvAddInfo = view.lvAddInfo
     val tvSalesCount = view.tvSalesCount
 }

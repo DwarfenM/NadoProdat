@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/ic_item_background"
+        android:background="@drawable/ic_sales_child_background"
         android:orientation="horizontal">
 
         <ImageView
