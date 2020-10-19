@@ -30,7 +30,12 @@ class SingleSaleItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SingleSale
     override fun onBindViewHolder(holder: SingleSaleItemsHolder, position: Int) {
         holder.tvItemName.text = items[position].product.product.name
         holder.tvPriceXCount.text = items[position].salesDetails.productCount.toString() + " x " + items[position].product.product.salesPrice.toString()
-        holder.tvSum.text = items[position].salesDetails.productSalesPrice.toString()
+        holder.tvItemPrice.text = items[position].salesDetails.productSalesPrice.toString()
+    }
+
+    fun addItems(itemsToAdd: MutableList<SalesDetailsWithProducts>) {
+        items = itemsToAdd
+        notifyDataSetChanged()
     }
 
 }
@@ -38,5 +43,5 @@ class SingleSaleItemsAdapter(val ctx: Context) : RecyclerView.Adapter<SingleSale
 class SingleSaleItemsHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvItemName = view.tvItemName
     val tvPriceXCount = view.tvItemPriceXCount
-    val tvSum = view.tvSum
+    val tvItemPrice = view.tvItemPrice
 }

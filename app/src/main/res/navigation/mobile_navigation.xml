@@ -22,4 +22,28 @@
         android:name="kz.sherua.nadoprodat.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/salesFragment"
+        android:name="kz.sherua.nadoprodat.fragment.SalesFragment"
+        android:label="fragment_sales"
+        tools:layout="@layout/fragment_sales" >
+        <action
+            android:id="@+id/action_salesFragment_to_singleSaleFragment"
+            app:destination="@id/singleSaleFragment" >
+            <argument
+                android:name="listOfSaleDetails"
+                app:argType="string"
+                />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/singleSaleFragment"
+        android:name="kz.sherua.nadoprodat.fragment.SingleSaleFragment"
+        android:label="fragment_single_sale"
+        tools:layout="@layout/fragment_single_sale" >
+        <argument
+            android:name="listOfSaleDetails"
+            app:argType="string"
+            />
+    </fragment>
 </navigation>

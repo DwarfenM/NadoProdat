@@ -81,7 +81,7 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
                             salesId = id,
                             productId = it.id!!,
                             productCount = it.count,
-                            productSalesPrice = it.salesPrice,
+                            productSalesPrice = it.salesPrice * it.count,
                             crDate = System.currentTimeMillis()
                         )
                     }

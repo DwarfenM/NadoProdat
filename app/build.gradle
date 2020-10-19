@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
+
 
 ext {
     nav_version = "1.0.0"
@@ -41,6 +43,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+}
+sourceSets {
+    main {
+        java {
+            srcDirs += 'build/generated/source/navigation-args'
+        }
     }
 }
 

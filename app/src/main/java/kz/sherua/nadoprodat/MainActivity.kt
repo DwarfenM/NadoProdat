@@ -44,13 +44,15 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+        val navController = findNavController(R.id.nav_host_fragment)
         lvSells.setOnClickListener {
             val salesFragment: SalesFragment = SalesFragment()
-            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, salesFragment, salesFragment.NAME).commit()
+            navController.navigate(R.id.salesFragment)
+//            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, salesFragment, salesFragment.NAME).commit()
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+
 
         val actionBarDrawerToggle =  object : ActionBarDrawerToggle1(
             this,
