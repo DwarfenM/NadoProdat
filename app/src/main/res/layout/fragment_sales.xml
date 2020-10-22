@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarSales">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
@@ -42,24 +42,63 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="20dp" />
 
+        <LinearLayout
+            android:id="@+id/lvSumSales"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_sales_sum_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectDatePeriod"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Итого заработано:"
+                android:textColor="#D3E1D9"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvSalesSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="TextView"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSales"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="@+id/guideline6">
+            app:layout_constraintTop_toBottomOf="@+id/lvSumSales"
+            app:layout_constraintVertical_bias="0.0">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <Spinner
+        <TextView
             android:id="@+id/spinnerSort"
-            style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@android:color/white"
+            android:background="@drawable/ic_solid_black"
+            android:fontFamily="@font/circe_bold"
+            android:gravity="center"
+            android:text="Сортировка по дате: "
+            android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,58 +112,22 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
-        <com.omega_r.libs.OmegaCenterIconButton
-            android:id="@+id/btnDeleteAllFromBasket"
+        <TextView
+            android:id="@+id/tvSelectDatePeriod"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#FFFFFF"
-            android:drawableStart="@drawable/ic_delete_all"
+            android:background="@drawable/ic_solid_black"
             android:drawablePadding="0dp"
+            android:fontFamily="@font/circe_bold"
             android:gravity="center"
-            android:text="Удалить все"
+            android:text="Выберите период"
             android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarSales"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintBottom_toBottomOf="@+id/emptySales"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarBasket"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-
-            <SearchView
-                android:id="@+id/searchViewBasket"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="rtl"
-                android:paddingLeft="-8dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                app:closeIcon="@drawable/ic_close_search"
-                app:iconifiedByDefault="true"
-                app:showAsAction="collapseActionView|always">
-
-            </SearchView>
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/emptySales"
@@ -137,13 +140,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:src="@drawable/ic_basket"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_sell" />
+            android:src="@drawable/ic_sell" />
 
         <TextView
             android:id="@+id/tvAddGoods"

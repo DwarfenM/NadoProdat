@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,6 +38,7 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_sales, container, false)
     }
 
@@ -48,12 +50,11 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.appBarMain?.visibility = View.VISIBLE
-        appBarSales.visibility = View.GONE
         activity?.tvHeaderTab?.visibility = View.VISIBLE
+        activity?.tvHeaderTab?.text = "Продажи"
         searchConstraintLayout.visibility = View.GONE
         emptySales.visibility = View.VISIBLE
         hasItemLayout.visibility = View.GONE
-
         itemsAdapter = SalesItemsAdapter(context!!)
         rvSales.adapter = itemsAdapter
         rvSales.layoutManager = GridLayoutManager(context!!, 1)
@@ -69,7 +70,6 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
         when (state) {
             is SalesState.SalesEmpty -> {
                 activity?.appBarMain?.visibility = View.VISIBLE
-                appBarSales.visibility = View.GONE
                 activity?.tvHeaderTab?.visibility = View.VISIBLE
                 searchConstraintLayout.visibility = View.GONE
                 emptySales.visibility = View.VISIBLE
@@ -81,6 +81,8 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
                 searchConstraintLayout.visibility = View.GONE
                 emptySales.visibility = View.GONE
                 hasItemLayout.visibility = View.VISIBLE
+//                tvSalesSum.text = state.sellsList.sumByDouble { it.salesDetails.sumByDouble { it.salesDetails.productSalesPrice * it.salesDetails.productCount } }.toString()
+                tvSalesSum.text = state.sellsList.sumByDouble { it.sales.salesPrice }.toString()
                 val groupedList = state.sellsList.groupBy {
                     val date = Date(it.sales.crDate)
                     val formatter = SimpleDateFormat("dd/MM/yyyy")
@@ -94,6 +96,13 @@ class SalesFragment : MviFragment<SalesView, SalesPresenter>(), SalesView {
                         }.sum(),
                         it.second.toMutableList()
                     )
+                }
+                tvSelectDatePeriod.setOnClickListener {
+                    val builder = MaterialDatePicker.Builder.dateRangePicker()
+                    val picker = builder.setTheme(R.style.MainDatePickerStyle).build()
+                    picker.show(activity?.supportFragmentManager!!, picker.toString())
+                    picker.addOnPositiveButtonClickListener { Log.d("tag","The selected date range is ${it.first} - ${it.second}")}
+
                 }
                 itemsAdapter.addItems(parentSalesModel.toMutableList());
 //                Log.d("Date list: ", parentSalesModel.toString())
