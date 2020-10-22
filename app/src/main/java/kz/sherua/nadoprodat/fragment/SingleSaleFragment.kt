@@ -1,9 +1,11 @@
 package kz.sherua.nadoprodat.fragment
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,6 +44,10 @@ class SingleSaleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = activity?.window
+            window!!.statusBarColor = ContextCompat.getColor(activity!!,R.color.lightGreen)
+        }
         toolbarSingleSale.navigationIcon = resources.getDrawable(R.drawable.ic_back_button)
         toolbarSingleSale.setNavigationOnClickListener {
             activity!!.onBackPressed()
