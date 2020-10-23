@@ -8,7 +8,7 @@ import kz.sherua.nadoprodat.database.NadoProdatDatabase
 import kz.sherua.nadoprodat.state.SalesState
 import kz.sherua.nadoprodat.view.SalesView
 
-class SalesPresenter(val ctx: Context) : MviBasePresenter<SalesView, SalesState>() {
+class SalesPresenter(ctx: Context) : MviBasePresenter<SalesView, SalesState>() {
 
     private val npDb = NadoProdatDatabase.getInstance(ctx)
 
@@ -24,7 +24,20 @@ class SalesPresenter(val ctx: Context) : MviBasePresenter<SalesView, SalesState>
                 }
             }
 
-        val allIntents = checkSalesConditionIntent.observeOn(AndroidSchedulers.mainThread())
+        val dateRangeIntent: Observable<SalesState> =
+            intent(SalesView::dateRangeSortIntent).flatMap {
+                if (it.startDate == it.endDate) {
+                    npDb.salesDao().getSalesWithPeriod(it.startDate, it.endDate + 86340000).toObservable().map {
+                        SalesState.DateRangeSales(it)
+                    }
+                } else {
+                    npDb.salesDao().getSalesWithPeriod(it.startDate, it.endDate).toObservable().map {
+                        SalesState.DateRangeSales(it)
+                    }
+                }
+            }
+
+        val allIntents = Observable.merge(checkSalesConditionIntent, dateRangeIntent).observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, SalesView::render)
     }

@@ -18,4 +18,8 @@ interface SalesDao {
     @Transaction
     @Query("SELECT * FROM Sales")
     fun getSales(): Flowable<List<SalesWithDetailsAndProducts>>
+
+    @Transaction
+    @Query("SELECT * FROM Sales s where s.crDate > :startDate and s.crDate < :endDate")
+    fun getSalesWithPeriod(startDate: Long, endDate: Long): Flowable<List<SalesWithDetailsAndProducts>>
 }
