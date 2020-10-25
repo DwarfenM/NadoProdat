@@ -46,9 +46,13 @@ class MainActivity : AppCompatActivity() {
         }
         val navController = findNavController(R.id.nav_host_fragment)
         lvSells.setOnClickListener {
-            val salesFragment: SalesFragment = SalesFragment()
             navController.navigate(R.id.salesFragment)
-//            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, salesFragment, salesFragment.NAME).commit()
+        }
+        lvStorage.setOnClickListener {
+            navController.navigate(R.id.storageFragment)
+        }
+        lvBasket.setOnClickListener {
+            navController.navigate(R.id.nav_home)
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

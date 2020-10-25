@@ -23,4 +23,8 @@ interface ProductDao {
     @Query("SELECT * FROM Product WHERE name like '%' || :nameLike || '%'")
     fun getFoundProducts(nameLike: String): Flowable<List<ProductWithProps>>
 
+    @Transaction
+    @Query("SELECT * FROM Product")
+    fun getAllProducts(): Flowable<List<ProductWithProps>>
+
 }

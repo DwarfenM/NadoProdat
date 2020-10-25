@@ -46,4 +46,9 @@
             app:argType="string"
             />
     </fragment>
+    <fragment
+        android:id="@+id/storageFragment"
+        android:name="kz.sherua.nadoprodat.fragment.StorageFragment"
+        android:label="fragment_storage"
+        tools:layout="@layout/fragment_storage" />
 </navigation>
