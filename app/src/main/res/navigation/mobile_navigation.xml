@@ -50,5 +50,32 @@
         android:id="@+id/storageFragment"
         android:name="kz.sherua.nadoprodat.fragment.StorageFragment"
         android:label="fragment_storage"
-        tools:layout="@layout/fragment_storage" />
+        tools:layout="@layout/fragment_storage" >
+        <action
+            android:id="@+id/action_storageFragment_to_singleProductFragment"
+            app:destination="@id/singleProductFragment" >
+            <argument
+                android:name="productData"
+                app:argType="string"
+                />
+            <argument
+                android:name="isNew"
+                app:argType="boolean"
+                />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/singleProductFragment"
+        android:name="kz.sherua.nadoprodat.fragment.SingleProductFragment"
+        android:label="fragment_single_product"
+        tools:layout="@layout/fragment_single_product" >
+        <argument
+            android:name="productData"
+            app:argType="string"
+            />
+        <argument
+            android:name="isNew"
+            app:argType="boolean"
+            />
+    </fragment>
 </navigation>

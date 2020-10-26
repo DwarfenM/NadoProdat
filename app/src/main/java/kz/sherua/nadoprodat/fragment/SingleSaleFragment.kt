@@ -23,7 +23,7 @@ class SingleSaleFragment : Fragment() {
 
     lateinit var listOfSaleItems: SingleSaleItem
     lateinit var adapter: SingleSaleItemsAdapter
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+    private val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
     val args: SingleSaleFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {

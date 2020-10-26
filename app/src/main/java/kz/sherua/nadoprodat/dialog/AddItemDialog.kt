@@ -44,7 +44,7 @@ class AddItemDialog(val itemAddTrigger: BehaviorSubject<Boolean>) :  MviDialogFr
 
     override fun addItemIntent(): Observable<Product> {
         return RxView.clicks(btnAddItemAddItem).map {
-            Product(name = etAddItemItemName.text.toString(), count = tvAddItemCount.text.toString().toInt(), salesPrice = etAddItemPrice.text.toString().toDouble(), isFlex = true)
+            Product(name = etAddItemItemName.text.toString(), count = tvAddItemCount.text.toString().toInt(), salesPrice = etAddItemPrice.text.toString().toDouble(), isFlex = true, crDate = System.currentTimeMillis())
         }
     }
 

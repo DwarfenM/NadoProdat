@@ -18,6 +18,6 @@ data class Product(@PrimaryKey(autoGenerate = true)
                    var typeId: Long? = null,
                    var isFlex: Boolean? = false,
                    var image: String? = null,
-                   var crDate: Long? = null,
+                   var crDate: Long,
                    var upDate: Long? = null
 )
