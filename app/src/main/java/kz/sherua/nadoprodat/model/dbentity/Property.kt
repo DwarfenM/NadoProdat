@@ -8,7 +8,7 @@ import java.util.*
 data class Property (
     @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
-    val name: String,
+    var name: String,
     val crDate: Long,
     val upDate: Long
 )

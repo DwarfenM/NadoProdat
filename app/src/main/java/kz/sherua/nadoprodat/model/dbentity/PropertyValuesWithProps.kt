@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class PropertyValuesWithProps(
-    @Embedded var propertyValues: PropertyValues,
+    @Embedded var propertyValues: PropertyValues?,
     @Relation(
         entity = Property::class,
         entityColumn = "id",

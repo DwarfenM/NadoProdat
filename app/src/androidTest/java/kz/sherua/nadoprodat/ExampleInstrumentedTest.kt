@@ -70,7 +70,7 @@ class ExampleInstrumentedTest {
         val sales = Sales(id=0,salesPrice = 10.0, crDate = 0)
         salesDao.insertSale(sales).subscribe()
 
-        val salesDetail = SaleDetails(salesId = 0,productId = 0,productSalesPrice = 0.0,crDate = 0)
+        val salesDetail = SaleDetails(salesId = 0,productId = 0,productSalesPrice = 0.0,crDate = 0,productCount = 0)
         salesDetailsDao.insertAllSaleDetails(arrayListOf(salesDetail)).subscribe()
 
         Log.d("testDbSales", "sales values: ${salesDao.getSales()}")

@@ -18,7 +18,7 @@ import kz.sherua.nadoprodat.presenter.AddItemPresenter
 import kz.sherua.nadoprodat.state.AddItemState
 import kz.sherua.nadoprodat.view.AddItemView
 
-class AddItemDialog(val itemAddTrigger: BehaviorSubject<Boolean>) :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddItemView{
+class AddItemDialog(private val itemAddTrigger: BehaviorSubject<Boolean>) :  MviDialogFragment<AddItemView,AddItemPresenter>(), AddItemView{
 
     companion object {
 

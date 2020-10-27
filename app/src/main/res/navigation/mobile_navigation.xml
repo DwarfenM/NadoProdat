@@ -78,4 +78,5 @@
             app:argType="boolean"
             />
     </fragment>
+
 </navigation>
