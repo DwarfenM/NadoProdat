@@ -6,4 +6,6 @@ sealed class SingleProductState {
 
     data class PropertyReceived(val property: List<PropertyValuesWithProps>) : SingleProductState()
 
+    object ProductSaved: SingleProductState()
+
 }

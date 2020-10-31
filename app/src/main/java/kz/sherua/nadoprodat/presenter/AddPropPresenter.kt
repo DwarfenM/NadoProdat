@@ -18,9 +18,9 @@ class AddPropPresenter(val ctx: Context) : MviBasePresenter<AddPropDialogView, A
         val addPropIntent: Observable<AddPropDialogState> =
             intent(AddPropDialogView::addPropIntent).flatMap {
                 val prop = Property(name = it, crDate = System.currentTimeMillis(), upDate = System.currentTimeMillis())
-                npDb.propertyDao().insertProperty(prop).andThen(
+                npDb.propertyDao().insertProperty(prop).toObservable().flatMap {
                     Observable.just(AddPropDialogState.itemAdded)
-                ).subscribeOn(Schedulers.io())
+                }.subscribeOn(Schedulers.io())
             }
 
         val allIntents = addPropIntent.observeOn(AndroidSchedulers.mainThread())

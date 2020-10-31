@@ -20,6 +20,7 @@ import kz.sherua.nadoprodat.adapter.PropertiesAdapter
 import kz.sherua.nadoprodat.dialog.AddItemDialog
 import kz.sherua.nadoprodat.dialog.AddPropDialog
 import kz.sherua.nadoprodat.dialog.PropertiesBottomDialogFragment
+import kz.sherua.nadoprodat.model.ProductToSave
 import kz.sherua.nadoprodat.model.dbentity.ProductWithProps
 import kz.sherua.nadoprodat.model.dbentity.Property
 import kz.sherua.nadoprodat.presenter.SingleProductPresenter
@@ -77,6 +78,10 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
 
     override fun receivePropertiesIntent(): Observable<List<Property>> {
         return itemAdded
+    }
+
+    override fun saveProductIntent(): Observable<ProductToSave> {
+        TODO("Not yet implemented")
     }
 
     override fun render(state: SingleProductState) {
