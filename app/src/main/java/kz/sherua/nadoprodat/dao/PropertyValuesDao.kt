@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import io.reactivex.Completable
 import io.reactivex.Single
 import kz.sherua.nadoprodat.model.dbentity.PropertyValuesWithProps
 import kz.sherua.nadoprodat.model.dbentity.PropertyValues
@@ -13,6 +14,10 @@ interface PropertyValuesDao {
 
     @Insert
     fun insertPropertyValues(propertyValues: PropertyValues) : Single<Long>
+
+    @Transaction
+    @Query("DELETE FROM PropertyValues WHERE productId = :productId")
+    fun deletePropsByProductId(productId: Long) : Completable
 
     @Transaction
     @Query("SELECT * FROM PropertyValues WHERE productId = :productId")

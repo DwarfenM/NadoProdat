@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.hannesdorfmann.mosby3.mvi.MviFragment
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_single_product.*
@@ -33,6 +34,7 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
 
     private lateinit var itemsAdapter: PropertiesAdapter
     private lateinit var itemAdded: BehaviorSubject<List<Property>>
+    private lateinit var product: ProductWithProps
     private val args: SingleProductFragmentArgs by navArgs()
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
 
@@ -62,7 +64,7 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
         rvProps.adapter = itemsAdapter
         rvProps.layoutManager = GridLayoutManager(context!!, 1)
         if (!args.isNew) {
-            val product = Gson().fromJson(args.productData, ProductWithProps::class.java)
+            product = Gson().fromJson(args.productData, ProductWithProps::class.java)
             etProductName.setText(product.product.name)
             tvProductCount.text = product.product.count.toString()
             etSellPrice.setText(product.product.salesPrice.toString())
@@ -81,7 +83,9 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
     }
 
     override fun saveProductIntent(): Observable<ProductToSave> {
-        TODO("Not yet implemented")
+        return RxView.clicks(btnAddItem).map {
+            ProductToSave(product?.product.id,etProductName.text.toString(),tvProductCount.text.toString().toInt(),etSellPrice.text.toString().toDouble(), etActualPrice.text.toString().toDouble(),itemsAdapter.getItems(),args.isNew)
+        }
     }
 
     override fun render(state: SingleProductState) {
@@ -89,6 +93,9 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
             is SingleProductState.PropertyReceived -> {
                 Log.d("tag", state.property.toString())
                 itemsAdapter.addItems(state.property)
+            }
+            is SingleProductState.ProductSaved -> {
+                activity?.onBackPressed()
             }
         }
     }
