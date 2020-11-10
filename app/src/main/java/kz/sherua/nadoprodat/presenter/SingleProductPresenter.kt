@@ -1,6 +1,7 @@
 package kz.sherua.nadoprodat.presenter
 
 import android.content.Context
+import android.util.Log
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -20,6 +21,7 @@ class SingleProductPresenter(val ctx: Context) :
     private val npDb = NadoProdatDatabase.getInstance(ctx)
 
     override fun bindIntents() {
+
         val receivePropertiesIntent: Observable<SingleProductState> =
             intent(SingleProductView::receivePropertiesIntent).map {
                 SingleProductState.PropertyReceived(it.map { prop ->
@@ -32,16 +34,9 @@ class SingleProductPresenter(val ctx: Context) :
 
         val productSaveIntent: Observable<SingleProductState> =
             intent(SingleProductView::saveProductIntent).flatMap { prod ->
-
                 if (prod.isToCreate) {
                     npDb.productDao().insertProduct(
-                        Product(
-                            name = prod.productName,
-                            count = prod.productCount.toInt(),
-                            salesPrice = prod.productSalesPrice,
-                            costPrice = prod.productCostPrice,
-                            crDate = System.currentTimeMillis()
-                        )
+                        prod.product
                     ).toObservable().flatMap { id ->
                         for ((key, value) in prod.props) {
                             npDb.propertyValuesDao().insertPropertyValues(
@@ -55,19 +50,22 @@ class SingleProductPresenter(val ctx: Context) :
                         Observable.just(SingleProductState.ProductSaved)
                     }.subscribeOn(Schedulers.io())
                 } else {
-                    npDb.propertyValuesDao().deletePropsByProductId(prod.productId!!).doOnComplete{
-                        for ((key, value) in prod.props) {
-                            npDb.propertyValuesDao().insertPropertyValues(
-                                PropertyValues(
-                                    productId = prod.productId!!,
-                                    propertyId = key.id!!,
-                                    value = value
-                                )
-                            ).subscribe()
-                        }
-                    }.toObservable<SingleProductState>().flatMap {
-                        Observable.just(SingleProductState.ProductSaved)
-                    }.subscribeOn(Schedulers.io())
+                    npDb.productDao().updateProduct(prod.product).doOnComplete {
+                        npDb.propertyValuesDao().deletePropsByProductId(prod.product.id!!)
+                            .doOnComplete {
+                                for ((key, value) in prod.props) {
+                                    npDb.propertyValuesDao().insertPropertyValues(
+                                        PropertyValues(
+                                            productId = prod.product.id!!,
+                                            propertyId = key.id!!,
+                                            value = value
+                                        )
+                                    ).subscribe()
+                                }
+                            }.subscribe()
+                    }.toObservable<SingleProductState>()
+                        .flatMap { Observable.just(SingleProductState.ProductSaved) }
+                        .subscribeOn(Schedulers.io())
                 }
             }
 

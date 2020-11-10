@@ -1,9 +1,6 @@
 package kz.sherua.nadoprodat.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -15,6 +12,9 @@ interface ProductDao {
 
     @Insert
     fun insertProduct(product: Product) : Single<Long>
+
+    @Update
+    fun updateProduct(product: Product) : Completable
 
     @Query("UPDATE product set count = case when count - :count >= 0 then count - :count else 0 end WHERE id = :productId")
     fun updateProduct(productId: Long, count: Int) : Completable

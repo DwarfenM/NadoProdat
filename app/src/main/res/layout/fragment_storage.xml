@@ -41,7 +41,7 @@
             app:layout_constraintGuide_begin="20dp" />
 
         <android.widget.Button
-            android:id="@+id/btnSell"
+            android:id="@+id/btnCreateItem"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:background="@drawable/rounded_rectangle_button"
@@ -60,8 +60,10 @@
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="@+id/guideline6">
+            app:layout_constraintTop_toTopOf="@+id/guideline6"
+            app:layout_constraintVertical_bias="0.0">
 
         </androidx.recyclerview.widget.RecyclerView>
 

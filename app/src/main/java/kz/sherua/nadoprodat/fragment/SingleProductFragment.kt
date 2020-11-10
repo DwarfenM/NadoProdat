@@ -22,6 +22,7 @@ import kz.sherua.nadoprodat.dialog.AddItemDialog
 import kz.sherua.nadoprodat.dialog.AddPropDialog
 import kz.sherua.nadoprodat.dialog.PropertiesBottomDialogFragment
 import kz.sherua.nadoprodat.model.ProductToSave
+import kz.sherua.nadoprodat.model.dbentity.Product
 import kz.sherua.nadoprodat.model.dbentity.ProductWithProps
 import kz.sherua.nadoprodat.model.dbentity.Property
 import kz.sherua.nadoprodat.presenter.SingleProductPresenter
@@ -84,7 +85,7 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
 
     override fun saveProductIntent(): Observable<ProductToSave> {
         return RxView.clicks(btnAddItem).map {
-            ProductToSave(product?.product.id,etProductName.text.toString(),tvProductCount.text.toString().toInt(),etSellPrice.text.toString().toDouble(), etActualPrice.text.toString().toDouble(),itemsAdapter.getItems(),args.isNew)
+            ProductToSave(Product(id = if (this::product.isInitialized) product?.product.id else null,name = etProductName.text.toString(),count = tvProductCount.text.toString().toInt(),salesPrice = etSellPrice.text.toString().toDouble(),costPrice =  etActualPrice.text.toString().toDouble(),crDate =  if (this::product.isInitialized)  product?.product.crDate else System.currentTimeMillis()),itemsAdapter.getItems(),args.isNew)
         }
     }
 

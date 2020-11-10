@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import io.reactivex.Observable
@@ -47,6 +49,12 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
         activity?.appBarMain?.visibility = View.GONE
         rvStorage.adapter = itemsAdapter
         rvStorage.layoutManager = GridLayoutManager(context!!, 1)
+        btnCreateItem.setOnClickListener {
+            val navController =
+                Navigation.findNavController((context as FragmentActivity).findViewById(R.id.nav_host_fragment))
+            val action = StorageFragmentDirections.actionStorageFragmentToSingleProductFragment("", true)
+            navController.navigate(action)
+        }
     }
 
     override fun createPresenter() = StoragePresenter(context!!)
@@ -54,6 +62,7 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
     override fun checkProductConditionIntent(): Observable<Boolean> {
         return checkConditionTrigger
     }
+
 
     override fun render(state: StorageState) {
         when(state) {

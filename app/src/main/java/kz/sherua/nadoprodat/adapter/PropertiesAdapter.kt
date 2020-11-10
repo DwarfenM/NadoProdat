@@ -58,6 +58,7 @@ class PropertiesAdapter(val ctx: Context) : RecyclerView.Adapter<PropertiesViewH
         data.forEach {
             mapOfProps[it.property] = viewHolders.first{hold -> hold.tvPropertyName.text == it.property.name}.etPropValue.text.toString()
         }
+        Log.d("PropVals", mapOfProps.toString())
         return mapOfProps
     }
 
