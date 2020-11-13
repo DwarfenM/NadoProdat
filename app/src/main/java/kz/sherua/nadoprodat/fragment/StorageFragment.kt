@@ -11,7 +11,9 @@ import com.hannesdorfmann.mosby3.mvi.MviFragment
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_storage.*
+import kotlinx.android.synthetic.main.fragment_storage.hasItemLayout
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.adapter.StorageItemsAdapter
 import kz.sherua.nadoprodat.presenter.StoragePresenter
@@ -46,9 +48,20 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemsAdapter = StorageItemsAdapter(context!!)
-        activity?.appBarMain?.visibility = View.GONE
+        appBarStorage.visibility = View.GONE
         rvStorage.adapter = itemsAdapter
         rvStorage.layoutManager = GridLayoutManager(context!!, 1)
+        toolbarStorage.setNavigationIcon(R.drawable.ic_back_button)
+        toolbarStorage.setNavigationOnClickListener{
+            activity?.appBarMain?.visibility = View.VISIBLE
+            appBarStorage.visibility = View.GONE
+        }
+        activity?.searchView?.setOnSearchClickListener {
+            activity?.searchView?.onActionViewCollapsed()
+            activity?.appBarMain?.visibility = View.GONE
+            appBarStorage.visibility = View.VISIBLE
+            searchViewStorage.onActionViewExpanded()
+        }
         btnCreateItem.setOnClickListener {
             val navController =
                 Navigation.findNavController((context as FragmentActivity).findViewById(R.id.nav_host_fragment))

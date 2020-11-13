@@ -145,11 +145,11 @@ class BasketFragment : MviFragment<BasketView,BasketPresenter>(), BasketView{
     override fun render(state: BasketState) {
         when(state) {
             is BasketState.OpenSearch -> {
-                activity?.appBarMain?.visibility = View.GONE
 //                activity?.textView2?.visibility = View.GONE
                 val closeBtn = androidx.appcompat.R.id.search_close_btn
                 val imView = activity?.searchView?.findViewById<ImageView>(closeBtn)
                 imView?.visibility = View.VISIBLE
+                activity?.appBarMain?.visibility = View.GONE
                 appBarBasket.visibility = View.VISIBLE
                 searchViewBasket.onActionViewExpanded()
                 searchConstraintLayout.visibility = View.VISIBLE
