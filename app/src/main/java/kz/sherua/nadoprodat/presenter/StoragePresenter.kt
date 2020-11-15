@@ -25,7 +25,18 @@ class StoragePresenter(ctx: Context) : MviBasePresenter<StorageView, StorageStat
                 }.subscribeOn(Schedulers.io())
             }
 
-        val allIntents = checkSalesConditionIntent.observeOn(AndroidSchedulers.mainThread())
+        val searchProductsIntent: Observable<StorageState> =
+            intent(StorageView::searchProductsIntent).flatMap { productName ->
+                npDb.productDao().getFoundProducts(productName).toObservable().map {
+                    if (it.isNotEmpty()) {
+                        StorageState.GetAllProducts(it)
+                    } else {
+                        StorageState.NoProducts
+                    }
+                }.subscribeOn(Schedulers.io())
+            }
+
+        val allIntents =Observable.merge(searchProductsIntent,checkSalesConditionIntent).observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, StorageView::render)
     }

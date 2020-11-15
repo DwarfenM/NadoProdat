@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
+import com.jakewharton.rxbinding2.widget.RxSearchView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
@@ -74,6 +75,11 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
 
     override fun checkProductConditionIntent(): Observable<Boolean> {
         return checkConditionTrigger
+    }
+
+    override fun searchProductsIntent(): Observable<String> {
+        return RxSearchView.queryTextChanges(searchViewStorage)
+            .map (CharSequence::toString)
     }
 
 
