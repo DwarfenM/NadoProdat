@@ -8,5 +8,7 @@ interface StorageView : MvpView {
 
     fun checkProductConditionIntent(): Observable<Boolean>
 
+    fun searchProductsIntent(): Observable<String>
+
     fun render(state: StorageState)
 }
