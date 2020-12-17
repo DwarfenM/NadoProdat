@@ -8,15 +8,16 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
+import com.jakewharton.rxbinding2.widget.RxAdapterView
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_storage.*
 import kotlinx.android.synthetic.main.fragment_storage.hasItemLayout
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.adapter.StorageItemsAdapter
+import kz.sherua.nadoprodat.model.StorageSortModel
 import kz.sherua.nadoprodat.presenter.StoragePresenter
 import kz.sherua.nadoprodat.state.StorageState
 import kz.sherua.nadoprodat.view.StorageView
@@ -30,11 +31,15 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.appBarMain?.visibility = View.VISIBLE
+        activity?.tvHeaderTab?.visibility = View.VISIBLE
+        activity?.tvHeaderTab?.text = "Склад"
         checkConditionTrigger = BehaviorSubject.create()
     }
 
     override fun onResume() {
         checkConditionTrigger.onNext(true)
+        activity?.appBarMain?.visibility = View.VISIBLE
         super.onResume()
     }
 
@@ -80,6 +85,12 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
     override fun searchProductsIntent(): Observable<String> {
         return RxSearchView.queryTextChanges(searchViewStorage)
             .map (CharSequence::toString)
+    }
+
+    override fun sortStorage(): Observable<StorageSortModel> {
+        return RxAdapterView.itemSelections(spinnerSort).map {
+           StorageSortModel(resources.getStringArray(R.array.storage_sort_array)[it].toString(), itemsAdapter.getItems())
+        }
     }
 
 

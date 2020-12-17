@@ -40,8 +40,13 @@ class StorageItemsAdapter (val ctx: Context) : RecyclerView.Adapter<StorageItemH
             val action = StorageFragmentDirections.actionStorageFragmentToSingleProductFragment(productString, false)
             navController.navigate(action)
         }
+        holder.tvCount.text = items[position].product.count.toString() + " шт."
+        holder.tvPrice.text = items[position].product.salesPrice.toString() + " тг."
     }
 
+    fun getItems(): List<ProductWithProps> {
+        return items.toList()
+    }
     fun addItems(itemsToAdd: MutableList<ProductWithProps>) {
         items = itemsToAdd
         notifyDataSetChanged()
@@ -52,7 +57,6 @@ class StorageItemsAdapter (val ctx: Context) : RecyclerView.Adapter<StorageItemH
 class StorageItemHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvName = view.tvItemName
     val tvPrice = view.tvItemPrice
-    val tvTime = view.tvTime
     val lvAddInfo = view.lvAddInfo
-    val tvSalesCount = view.tvSalesCount
+    val tvCount = view.tvCount
 }

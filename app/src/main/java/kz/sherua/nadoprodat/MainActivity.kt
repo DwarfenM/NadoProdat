@@ -45,17 +45,23 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
         val navController = findNavController(R.id.nav_host_fragment)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+
         lvSells.setOnClickListener {
             navController.navigate(R.id.salesFragment)
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
         lvStorage.setOnClickListener {
             navController.navigate(R.id.storageFragment)
+            drawerLayout.closeDrawer(GravityCompat.START)
+
         }
         lvBasket.setOnClickListener {
             navController.navigate(R.id.nav_home)
+            drawerLayout.closeDrawer(GravityCompat.START)
+
         }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
 
 
         val actionBarDrawerToggle =  object : ActionBarDrawerToggle1(

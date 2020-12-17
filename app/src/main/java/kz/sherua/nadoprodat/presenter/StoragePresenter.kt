@@ -36,7 +36,26 @@ class StoragePresenter(ctx: Context) : MviBasePresenter<StorageView, StorageStat
                 }.subscribeOn(Schedulers.io())
             }
 
-        val allIntents =Observable.merge(searchProductsIntent,checkSalesConditionIntent).observeOn(AndroidSchedulers.mainThread())
+        val sortStorageState: Observable<StorageState> =
+            intent(StorageView::sortStorage).map { sortModel ->
+                when (sortModel.sortType) {
+                    "По дате добавления" -> {
+                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.crDate }.toList())
+                    }
+                    "По цене за товар" -> {
+                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.costPrice }.toList())
+                    }
+                    "По алфавиту" -> {
+                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.name }.toList())
+                    }
+                    else -> {
+                        StorageState.GetAllProducts(sortModel.products)
+                    }
+                }
+
+            }
+
+        val allIntents =Observable.merge(searchProductsIntent,checkSalesConditionIntent, sortStorageState).observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, StorageView::render)
     }

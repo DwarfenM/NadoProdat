@@ -15,6 +15,7 @@ import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_single_product.*
 import kz.sherua.nadoprodat.R
 import kz.sherua.nadoprodat.adapter.PropertiesAdapter
@@ -42,6 +43,7 @@ class SingleProductFragment : MviFragment<SingleProductView, SingleProductPresen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         itemAdded = BehaviorSubject.create()
+        activity?.appBarMain?.visibility = View.GONE
     }
 
     override fun onCreateView(
