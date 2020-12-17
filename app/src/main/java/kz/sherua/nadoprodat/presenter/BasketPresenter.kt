@@ -20,6 +20,7 @@ class BasketPresenter(val ctx: Context) : MviBasePresenter<BasketView, BasketSta
     private val npDb = NadoProdatDatabase.getInstance(ctx)
 
     override fun bindIntents() {
+
         val openSearchIntent: Observable<BasketState> =
             intent(BasketView::openSearchIntent).map {
                 BasketState.OpenSearch
