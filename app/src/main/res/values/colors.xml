@@ -13,4 +13,6 @@
     <color name="plainGrey">#98A3B2</color>
     <color name="somehowBlack">#2D2F45</color>
     <color name="alphaPink">#26EFBDA8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black_overlay">#66000000</color>
 </resources>
