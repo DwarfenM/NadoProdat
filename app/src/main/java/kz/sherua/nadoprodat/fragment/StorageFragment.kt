@@ -65,6 +65,8 @@ class StorageFragment : MviFragment<StorageView, StoragePresenter>(), StorageVie
         activity?.searchView?.setOnSearchClickListener {
             activity?.searchView?.onActionViewCollapsed()
             activity?.appBarMain?.visibility = View.GONE
+            emptyStorage.visibility = View.GONE
+            hasItemLayout.visibility = View.GONE
             appBarStorage.visibility = View.VISIBLE
             searchViewStorage.onActionViewExpanded()
         }

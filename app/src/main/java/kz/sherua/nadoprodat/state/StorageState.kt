@@ -7,4 +7,5 @@ sealed class StorageState {
     object NoProducts : StorageState()
 
     data class GetAllProducts(val productList: List<ProductWithProps>) : StorageState()
+
 }

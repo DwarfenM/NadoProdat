@@ -1,6 +1,7 @@
 package kz.sherua.nadoprodat.presenter
 
 import android.content.Context
+import android.util.Log
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,8 +17,10 @@ class StoragePresenter(ctx: Context) : MviBasePresenter<StorageView, StorageStat
     override fun bindIntents() {
         val checkSalesConditionIntent: Observable<StorageState> =
             intent(StorageView::checkProductConditionIntent).flatMap {
+                Log.d("size", "WHAT")
                 npDb.productDao().getAllProducts().toObservable().map {
                     if (it.isNotEmpty()) {
+
                         StorageState.GetAllProducts(it)
                     } else {
                         StorageState.NoProducts
@@ -27,6 +30,8 @@ class StoragePresenter(ctx: Context) : MviBasePresenter<StorageView, StorageStat
 
         val searchProductsIntent: Observable<StorageState> =
             intent(StorageView::searchProductsIntent).flatMap { productName ->
+                Log.d("size", "WHAT1")
+
                 npDb.productDao().getFoundProducts(productName).toObservable().map {
                     if (it.isNotEmpty()) {
                         StorageState.GetAllProducts(it)
@@ -38,24 +43,33 @@ class StoragePresenter(ctx: Context) : MviBasePresenter<StorageView, StorageStat
 
         val sortStorageState: Observable<StorageState> =
             intent(StorageView::sortStorage).map { sortModel ->
-                when (sortModel.sortType) {
-                    "По дате добавления" -> {
-                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.crDate }.toList())
-                    }
-                    "По цене за товар" -> {
-                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.costPrice }.toList())
-                    }
-                    "По алфавиту" -> {
-                        StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.name }.toList())
-                    }
-                    else -> {
-                        StorageState.GetAllProducts(sortModel.products)
+                Log.d("size", "WHAT2")
+                if (sortModel.products.isEmpty()) {
+                    StorageState.NoProducts
+                } else {
+                    when (sortModel.sortType) {
+                        "По дате добавления" -> {
+                            StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.crDate }
+                                .toList())
+                        }
+                        "По цене за товар" -> {
+                            StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.costPrice }
+                                .toList())
+                        }
+                        "По алфавиту" -> {
+                            StorageState.GetAllProducts(sortModel.products.sortedByDescending { it.product.name }
+                                .toList())
+                        }
+                        else -> {
+                            StorageState.GetAllProducts(sortModel.products)
+                        }
                     }
                 }
-
             }
 
-        val allIntents =Observable.merge(searchProductsIntent,checkSalesConditionIntent, sortStorageState).observeOn(AndroidSchedulers.mainThread())
+        val allIntents =
+            Observable.merge(searchProductsIntent, checkSalesConditionIntent, sortStorageState)
+                .observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, StorageView::render)
     }

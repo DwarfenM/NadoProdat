@@ -1,20 +1,20 @@
 package kz.sherua.nadoprodat.presenter
 
 import android.content.Context
-import android.util.Log
+import android.database.Cursor
+import android.net.Uri
+import android.provider.MediaStore
 import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.add_item_dialog.*
 import kz.sherua.nadoprodat.database.NadoProdatDatabase
-import kz.sherua.nadoprodat.model.dbentity.Product
-import kz.sherua.nadoprodat.model.dbentity.Property
 import kz.sherua.nadoprodat.model.dbentity.PropertyValues
 import kz.sherua.nadoprodat.model.dbentity.PropertyValuesWithProps
 import kz.sherua.nadoprodat.state.SingleProductState
 import kz.sherua.nadoprodat.view.SingleProductView
+import java.io.File
+
 
 class SingleProductPresenter(val ctx: Context) :
     MviBasePresenter<SingleProductView, SingleProductState>() {
@@ -30,6 +30,11 @@ class SingleProductPresenter(val ctx: Context) :
                         propertyValues = null
                     )
                 })
+            }
+
+        val getImagePathIntent: Observable<SingleProductState> =
+            intent(SingleProductView::getImagePathIntent).map {
+                SingleProductState.ImagePicked(getPath(ctx, it))
             }
 
         val productSaveIntent: Observable<SingleProductState> =
@@ -69,9 +74,26 @@ class SingleProductPresenter(val ctx: Context) :
                 }
             }
 
-        val allIntents = Observable.merge(receivePropertiesIntent, productSaveIntent)
+        val allIntents = Observable.merge(getImagePathIntent, receivePropertiesIntent, productSaveIntent)
             .observeOn(AndroidSchedulers.mainThread())
 
         subscribeViewState(allIntents, SingleProductView::render)
+    }
+
+    fun getPath(context: Context, uri: Uri): String {
+        var result: String? = null
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = context.contentResolver.query(uri, proj, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val columnIndex: Int = cursor.getColumnIndexOrThrow(proj[0])
+                result = cursor.getString(columnIndex)
+            }
+            cursor.close()
+        }
+        if (result == null) {
+            result = "Not found"
+        }
+        return result
     }
 }
